@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-theme="light" style="color-scheme:light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -286,7 +286,26 @@ body[data-view="telefon"] .phone-sync{ display:flex; align-items:center; justify
   .compare{ display:none; }
 }
 @media (max-width: 760px){
-  .stage{ grid-template-columns:1fr; overflow:auto; }
+  html, body, .shell{ height:auto; min-height:100%; }
+  body{ overflow-x:hidden; }
+  .shell{ grid-template-rows:auto auto auto; grid-template-columns:minmax(0,1fr); }
+  .stage{ min-width:0; }
+  .phone-col{ align-items:center; overflow:hidden; }
+  .top{ padding:10px 16px; gap:10px; }
+  .brand{ width:100%; }
+  .brand b{ white-space:normal; }
+  .scenes{ margin-left:0; flex-wrap:wrap; }
+  .tools{ flex-wrap:wrap; }
+  .stage{ grid-template-columns:1fr; grid-template-rows:auto auto; overflow:visible; padding:14px 16px; gap:18px; }
+  .phone-col{ min-height:auto; }
+  .pos-col{ min-height:auto; }
+  .pos{ flex:none; }
+  .paper, .side{ overflow:visible; }
+  .codebox{ flex-wrap:wrap; }
+  .cap{ position:sticky; bottom:0; z-index:10; grid-template-columns:1fr; gap:10px; padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px)); }
+  .cap-text{ flex-direction:column; gap:6px; }
+  .cap-text p{ font-size:16px; }
+  .nav{ justify-content:flex-end; }
   .phone-wrap{ margin:0 auto; }
   .pos-body{ grid-template-columns:1fr; }
   .top{ flex-wrap:wrap; }
@@ -802,7 +821,9 @@ function fitPhone() {
   if (view === "telefon") return;
   const col = document.querySelector(".phone-col"), who = col.querySelector(".who");
   const h = col.clientHeight - who.offsetHeight - 12;
-  const scale = Math.max(0.5, Math.min(1.08, h / 806));
+  const scale = matchMedia("(max-width: 760px)").matches
+    ? Math.max(0.5, Math.min(0.9, (innerWidth - 32) / 382))
+    : Math.max(0.5, Math.min(1.08, h / 806));
   document.documentElement.style.setProperty("--ps", scale.toFixed(3));
 }
 new ResizeObserver(fitPhone).observe(document.getElementById("stage"));
